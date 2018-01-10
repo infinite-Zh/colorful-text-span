@@ -8,7 +8,7 @@ import android.text.style.ReplacementSpan
 import android.util.Log
 
 /**
- * Created by kfzhangxu on 2018/1/9.
+ * Created by infinite on 2018/1/9.
  */
 
 class ColorfulTextSpan private constructor(context: Context, builder: Builder) : ReplacementSpan() {
