@@ -108,14 +108,6 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
             return this
         }
 
-        fun texts(texts: List<String>): Builder {
-            if (texts.isNotEmpty()) {
-                this.texts.addAll(texts)
-
-            }
-            return this
-        }
-
         fun texts(texts: String): Builder {
             if (texts.isNotEmpty()) {
                 this.texts.add(texts)

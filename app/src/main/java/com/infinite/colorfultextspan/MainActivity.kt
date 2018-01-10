@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val spans = mutableListOf<ColorfulTextSpan>()
-        val content = "Android是一种基于Linux的自由及开放源代码的操作系统，主要使用于移动设备，如智能手机和平板电脑，由Google公司和开放手机联盟领导及开发。尚未有统一中文名称，中国大陆地区较多人使用“安卓”或“安致”。";
+        val content = "In Kotlin, everything is an object in the sense that we can call member functions and properties on any variable. Some of the types can have a special internal representation - for example, numbers, characters and booleans can be represented as primitive values at runtime - but to the user they look like ordinary classes. In this section we describe the basic types used in Kotlin: numbers, characters, booleans, arrays, and strings.";
         val stringBuilder = StringBuilder()
         //第一个Span
 //        stringBuilder.append(" ")
@@ -39,11 +39,23 @@ class MainActivity : AppCompatActivity() {
                 .build()
         spans.add(s2)
         stringBuilder.append(s2)
+
+        val b3= ColorfulTextSpan.Builder(this@MainActivity)
+        val s3 = b3.backgroundColor(R.color.colorPrimaryDark)
+                .texts("国外知名药品")
+                .textColor(android.R.color.white)
+                .padding(8)
+                .textSize(60f)
+                .margin(16)
+                .radius(10f)
+                .build()
+        spans.add(s3)
+        stringBuilder.append(s3)
         stringBuilder.append(content)
         val spannableString = SpannableString(stringBuilder.toString())
         //循环遍历设置Span
         for (i in spans.indices) {
-            spannableString.setSpan(spans[i], i, i + spans[i].toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(spans[i], spannableString.indexOf(spans[i].toString()), spannableString.indexOf(spans[i].toString()) + spans[i].toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         tv.text = spannableString
     }
