@@ -13,6 +13,9 @@ import android.util.Log
 
 class ColorfulTextSpan private constructor(context: Context, builder: Builder) : ReplacementSpan() {
 
+    companion object {
+        val TAG=ColorfulTextSpan::class.simpleName
+    }
     private val mTextPaint: Paint
     private val mBgPaint: Paint
     private var mPadding = 0
@@ -48,16 +51,14 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         val fm: Paint.FontMetrics = paint.fontMetrics
         val textHeight = fm.descent - fm.ascent
         val left = x
-        val t = y + fm.ascent - mPadding
+        val t = y + fm.ascent//计算top时，忽略padding，bottom同理
         val right = left + mWideh-margin
-        val b = t + textHeight + mPadding + fm.descent
+        val b = t + textHeight  + fm.descent
         val bgRect = RectF(left, t, right, b)
         canvas.drawRoundRect(bgRect, mRadius, mRadius, mBgPaint)
         val fontMetrics = mTextPaint.fontMetrics
-        val textBaseLine = (y - fontMetrics.descent - fontMetrics.ascent) / 2 + fontMetrics.descent
+        val textBaseLine = y + fontMetrics.descent/2
         canvas.drawText(mText, 0, mText.length, x + (mWideh-margin) / 2.toFloat(), textBaseLine, mTextPaint)
-
-
     }
 
     override fun toString(): String {
@@ -65,11 +66,11 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
     }
 
     class Builder(private val mCtx: Context) {
-        var textColorResId: Int = 0
-        var textSize: Float = 0f
+        var textColorResId: Int = android.R.color.white
+        var textSize: Float = 50f
         var texts: MutableList<String> = mutableListOf()
         var padding = 0
-        var backgroundColorResId: Int = 0
+        var backgroundColorResId: Int = R.color.colorPrimary
         var margin: Int = 0
         var radius:Float=0f
 
