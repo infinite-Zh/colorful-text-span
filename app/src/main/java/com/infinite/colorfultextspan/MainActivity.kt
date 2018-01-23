@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val b1 = ColorfulTextSpan.Builder(this@MainActivity)
         val s1 = b1.backgroundColor(R.color.colorPrimary)
                 .texts("新")
-                .textColor(android.R.color.white)
+                .textColor(android.R.color.black)
                 .padding(8)
                 .textSize(60f)
                 .margin(16)
