@@ -28,7 +28,11 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         mBgPaint = Paint()
         mBgPaint.color = ContextCompat.getColor(context, builder.backgroundColorResId)
-        mBgPaint.style = Paint.Style.FILL
+        if (builder.solid){
+            mBgPaint.style = Paint.Style.FILL
+        }else{
+            mBgPaint.style = Paint.Style.STROKE
+        }
         mTextPaint.color = ContextCompat.getColor(context, builder.textColorResId)
         mTextPaint.textSize = builder.textSize
         mTextPaint.textAlign = Paint.Align.CENTER
@@ -73,6 +77,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         var backgroundColorResId: Int = R.color.colorPrimary
         var margin: Int = 0
         var radius:Float=0f
+        var solid:Boolean=true
 
         fun textColor(colorResId: Int): Builder {
             textColorResId = colorResId
@@ -95,6 +100,11 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         }
         fun radius(radius:Float):Builder{
             this.radius=radius
+            return this
+        }
+
+        fun hollowBackground():Builder{
+            solid=false
             return this
         }
 

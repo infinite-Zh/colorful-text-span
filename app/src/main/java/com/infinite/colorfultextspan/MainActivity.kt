@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
                 .textSize(60f)
                 .margin(16)
                 .radius(20f)
+                .hollowBackground()
                 .build()
         spans.add(s1)
         stringBuilder.append(s1)
