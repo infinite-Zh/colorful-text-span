@@ -107,6 +107,9 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
             this.margin = margin
             return this
         }
+        /**
+         * 背景圆角
+         * */
         fun radius(radius:Float):Builder{
             this.radius=radius
             return this
