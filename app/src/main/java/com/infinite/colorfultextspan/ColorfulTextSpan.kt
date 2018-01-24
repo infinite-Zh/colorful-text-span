@@ -112,11 +112,17 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
             return this
         }
 
+        /**
+         * 设置背景为空心的
+         * */
         fun hollowBackground():Builder{
             solid=false
             return this
         }
 
+       /**
+        * 边框宽度
+       * */
         fun borderWidth(borderWidth:Float): Builder{
             this.borderWidth=borderWidth
             return this
