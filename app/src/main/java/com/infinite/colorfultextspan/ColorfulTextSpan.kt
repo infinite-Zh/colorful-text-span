@@ -1,12 +1,13 @@
 package com.infinite.colorfultextspan
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.text.style.ReplacementSpan
-import android.util.Log
-import java.util.*
 
 /**
  * Created by infinite on 2018/1/9.
