@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.text.style.ReplacementSpan
 import android.util.Log
+import java.util.*
 
 /**
  * Created by infinite on 2018/1/9.
@@ -23,6 +24,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
     private var mText: String
     private var margin: Int = 0
     private val mRadius:Float
+    private val  mBuilder:Builder = builder
 
     init {
         mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
@@ -48,6 +50,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         mTextPaint.getTextBounds(mText, 0, mText.length, rect)
         // span的宽度等于文字宽度加左右内边距
         mWideh = rect.width() + 2 * mPadding+margin
+        if (!mBuilder.solid) mWideh+=2*mBuilder.borderWidth.toInt()
 
         return mWideh
     }
@@ -55,7 +58,10 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
     override fun draw(canvas: Canvas, text: CharSequence, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
         val fm: Paint.FontMetrics = paint.fontMetrics
         val textHeight = fm.descent - fm.ascent
-        val left = x
+        var left = x
+        if (!mBuilder.solid){
+            left+=2*mBuilder.borderWidth.toInt()
+        }
         val t = y + fm.ascent//计算top时，忽略padding，bottom同理
         val right = left + mWideh-margin
         val b = t + textHeight  + fm.descent
@@ -63,7 +69,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         canvas.drawRoundRect(bgRect, mRadius, mRadius, mBgPaint)
         val fontMetrics = mTextPaint.fontMetrics
         val textBaseLine = y + fontMetrics.descent/2
-        canvas.drawText(mText, 0, mText.length, x + (mWideh-margin) / 2.toFloat(), textBaseLine, mTextPaint)
+        canvas.drawText(mText, 0, mText.length, left + (mWideh-margin) / 2.toFloat(), textBaseLine, mTextPaint)
     }
 
     override fun toString(): String {
