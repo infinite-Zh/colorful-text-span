@@ -32,6 +32,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
             mBgPaint.style = Paint.Style.FILL
         }else{
             mBgPaint.style = Paint.Style.STROKE
+            mBgPaint.strokeWidth=builder.borderWidth
         }
         mTextPaint.color = ContextCompat.getColor(context, builder.textColorResId)
         mTextPaint.textSize = builder.textSize
@@ -78,6 +79,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         var margin: Int = 0
         var radius:Float=0f
         var solid:Boolean=true
+        var borderWidth:Float=1f
 
         fun textColor(colorResId: Int): Builder {
             textColorResId = colorResId
@@ -105,6 +107,11 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
 
         fun hollowBackground():Builder{
             solid=false
+            return this
+        }
+
+        fun borderWidth(borderWidth:Float): Builder{
+            this.borderWidth=borderWidth
             return this
         }
 
