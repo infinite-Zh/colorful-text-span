@@ -88,16 +88,25 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         var solid:Boolean=true
         var borderWidth:Float=1f
 
+        /**
+         * 文字颜色
+         * */
         fun textColor(colorResId: Int): Builder {
             textColorResId = colorResId
             return this
         }
 
+        /**
+         * 背景色
+         * */
         fun backgroundColor(backgroundColorResId: Int): Builder {
             this.backgroundColorResId = backgroundColorResId
             return this
         }
 
+        /**
+         * 内边距
+         * */
         fun padding(padding: Int): Builder {
             this.padding = padding
             return this
