@@ -103,6 +103,9 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
             return this
         }
 
+        /**
+         * 边距
+         * */
         fun margin(margin: Int): Builder {
             this.margin = margin
             return this
