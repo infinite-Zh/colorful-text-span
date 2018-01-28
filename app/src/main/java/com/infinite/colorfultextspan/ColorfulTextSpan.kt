@@ -28,18 +28,22 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
     private val  mBuilder:Builder = builder
 
     init {
-        mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        mBgPaint = Paint()
-        mBgPaint.color = ContextCompat.getColor(context, builder.backgroundColorResId)
-        if (builder.solid){
-            mBgPaint.style = Paint.Style.FILL
-        }else{
-            mBgPaint.style = Paint.Style.STROKE
-            mBgPaint.strokeWidth=builder.borderWidth
+        mBgPaint = Paint().apply {
+            color = ContextCompat.getColor(context, builder.backgroundColorResId)
+            if (builder.solid){
+                style = Paint.Style.FILL
+            }else{
+                style = Paint.Style.STROKE
+                strokeWidth=builder.borderWidth
+            }
         }
-        mTextPaint.color = ContextCompat.getColor(context, builder.textColorResId)
-        mTextPaint.textSize = builder.textSize
-        mTextPaint.textAlign = Paint.Align.CENTER
+
+        mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(context, builder.textColorResId)
+            textSize = builder.textSize
+            textAlign = Paint.Align.CENTER
+        }
+
         mPadding = builder.padding
         mText = builder.texts[0]
         margin = builder.margin
