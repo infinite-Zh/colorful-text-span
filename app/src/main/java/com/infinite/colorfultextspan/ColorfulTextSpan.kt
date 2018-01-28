@@ -155,6 +155,9 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
             return this
         }
 
+        /**
+         * 设置文字
+         * */
         fun texts(texts: String): Builder {
             if (texts.isNotEmpty()) {
                 this.texts.add(texts)
