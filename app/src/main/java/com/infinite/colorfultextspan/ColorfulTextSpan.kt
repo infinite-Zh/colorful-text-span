@@ -53,8 +53,8 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
     override fun getSize(paint: Paint, text: CharSequence, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
         val rect = Rect()
         mTextPaint.getTextBounds(mText, 0, mText.length, rect)
-        // span的宽度等于文字宽度加左右内边距
-        mWideh = rect.width() + 2 * mPadding+margin
+        // span的宽度等于文字宽度加左右内边距、外边距
+        mWideh = rect.width() + 2 * mPadding+margin*2
         if (!mBuilder.solid) mWideh+=2*mBuilder.borderWidth.toInt()
 
         return mWideh
@@ -63,10 +63,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
     override fun draw(canvas: Canvas, text: CharSequence, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
         val fm: Paint.FontMetrics = paint.fontMetrics
         val textHeight = fm.descent - fm.ascent
-        var left = x
-        if (!mBuilder.solid){
-            left+=2*mBuilder.borderWidth.toInt()
-        }
+        var left = x+margin
         val t = y + fm.ascent//计算top时，忽略padding，bottom同理
         val right = left + mWideh-margin
         val b = t + textHeight  + fm.descent
