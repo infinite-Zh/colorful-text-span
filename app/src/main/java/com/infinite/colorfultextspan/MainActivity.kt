@@ -8,6 +8,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         val s1 = b1.backgroundColor(R.color.colorPrimary)
                 .texts("新")
                 .textColor(android.R.color.black)
-                .padding(8)
+                .padding(64)
                 .textSize(60f)
-                .margin(32)
+                .margin(0)
                 .radius(20f)
                 .hollowBackground()
                 .borderWidth(2f)
@@ -54,11 +55,11 @@ class MainActivity : AppCompatActivity() {
 
         val b3 = ColorfulTextSpan.Builder(this@MainActivity)
         val s3 = b3.backgroundColor(R.color.colorPrimaryDark)
-                .texts("国外知名药品")
+                .texts("国外知名药品国")
                 .textColor(android.R.color.white)
                 .padding(8)
                 .textSize(60f)
-                .margin(16)
+                .margin(160)
                 .radius(10f)
                 .build()
         spans.add(s3)
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         val s4 = b4.backgroundColor(R.color.colorAccent)
                 .texts("英文文章")
                 .textColor(android.R.color.black)
-                .padding(8)
+                .padding(80)
                 .textSize(60f)
                 .margin(16)
                 .radius(10f)
@@ -95,26 +96,30 @@ class MainActivity : AppCompatActivity() {
             var start = spannableString.indexOf(msg)
             var end = spannableString.indexOf(msg) + msg.length
             spannableString.setSpan(spans[i], start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(CSpan(this@MainActivity, msg), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
-            Log.e(TAG, "$msg start=$start end=$end")
+            val str="$msg start=$start end=$end"
+            spannableString.setSpan(CSpan(this@MainActivity, msg,str), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+            Log.e(TAG, str)
         }
         tv.movementMethod = LinkMovementMethod()
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,60f)
         tv.text = spannableString
         // todo 点击事件
     }
 
-    class CSpan(context: Context, msg: String) : ClickableSpan() {
+    class CSpan(context: Context, msg: String,str:String) : ClickableSpan() {
 
         private var context: Context? = null
         private var msg: String? = null
+        private var str: String? = null
 
         init {
             this.context = context
             this.msg = msg
+            this.str=str
         }
 
         override fun onClick(widget: View?) {
-            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+            Log.e(TAG,str)
         }
 
     }

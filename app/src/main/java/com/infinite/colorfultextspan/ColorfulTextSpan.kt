@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.text.style.ReplacementSpan
+import android.util.Log
 
 /**
  * Created by infinite on 2018/1/9.
@@ -16,25 +17,27 @@ import android.text.style.ReplacementSpan
 class ColorfulTextSpan private constructor(context: Context, builder: Builder) : ReplacementSpan() {
 
     companion object {
-        val TAG=ColorfulTextSpan::class.simpleName
+        val TAG = ColorfulTextSpan::class.simpleName
     }
+
     private val mTextPaint: Paint
     private val mBgPaint: Paint
     private var mPadding = 0
     private var mWideh = 0
     private var mText: String
     private var margin: Int = 0
-    private val mRadius:Float
-    private val  mBuilder:Builder = builder
+    private val mRadius: Float
+    private val mBuilder: Builder = builder
+    private var mTextLength = 0
 
     init {
         mBgPaint = Paint().apply {
             color = ContextCompat.getColor(context, builder.backgroundColorResId)
-            if (builder.solid){
+            if (builder.solid) {
                 style = Paint.Style.FILL
-            }else{
+            } else {
                 style = Paint.Style.STROKE
-                strokeWidth=builder.borderWidth
+                strokeWidth = builder.borderWidth
             }
         }
 
@@ -47,15 +50,16 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         mPadding = builder.padding
         mText = builder.texts[0]
         margin = builder.margin
-        mRadius=builder.radius
+        mRadius = builder.radius
     }
 
     override fun getSize(paint: Paint, text: CharSequence, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
         val rect = Rect()
         mTextPaint.getTextBounds(mText, 0, mText.length, rect)
+        mTextLength = rect.right
         // span的宽度等于文字宽度加左右内边距、外边距
-        mWideh = rect.width() + 2 * mPadding+margin*2
-        if (!mBuilder.solid) mWideh+=2*mBuilder.borderWidth.toInt()
+        mWideh = rect.width()+(mPadding+margin)*2
+        if (!mBuilder.solid) mWideh += 2 * mBuilder.borderWidth.toInt()
 
         return mWideh
     }
@@ -63,15 +67,26 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
     override fun draw(canvas: Canvas, text: CharSequence, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
         val fm: Paint.FontMetrics = paint.fontMetrics
         val textHeight = fm.descent - fm.ascent
-        var left = x+margin
+//        var left = x + margin
+//        val t = y + fm.ascent//计算top时，忽略padding，bottom同理
+//        val right = left + mTextLength + 2 * mPadding
+//        val b = t + textHeight + fm.descent
+//        val bgRect = RectF(left, t, right, b)
+//        canvas.drawRoundRect(bgRect, mRadius, mRadius, mBgPaint)
+//        val fontMetrics = mTextPaint.fontMetrics
+//        val textBaseLine = y + fontMetrics.descent / 2
+//        canvas.drawText(mText, 0, mText.length, left + (mWideh-margin) / 2.toFloat(), textBaseLine, mTextPaint)
+        Log.e(TAG,x.toString())
+        var left = x + margin
         val t = y + fm.ascent//计算top时，忽略padding，bottom同理
-        val right = left + mWideh-margin
-        val b = t + textHeight  + fm.descent
+        val right = left + mTextLength + 2 * mPadding
+        val b = t + textHeight + fm.descent
+        Log.e(TAG,right.toString())
         val bgRect = RectF(left, t, right, b)
         canvas.drawRoundRect(bgRect, mRadius, mRadius, mBgPaint)
         val fontMetrics = mTextPaint.fontMetrics
-        val textBaseLine = y + fontMetrics.descent/2
-        canvas.drawText(mText, 0, mText.length, left + (mWideh-margin) / 2.toFloat(), textBaseLine, mTextPaint)
+        val textBaseLine = y + fontMetrics.descent / 2
+        canvas.drawText(mText, 0, mText.length, (left + right) / 2, textBaseLine, mTextPaint)
     }
 
     override fun toString(): String {
@@ -85,9 +100,9 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         var padding = 0
         var backgroundColorResId: Int = R.color.colorPrimary
         var margin: Int = 0
-        var radius:Float=0f
-        var solid:Boolean=true
-        var borderWidth:Float=1f
+        var radius: Float = 0f
+        var solid: Boolean = true
+        var borderWidth: Float = 1f
 
         /**
          * 文字颜色
@@ -120,27 +135,28 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
             this.margin = margin
             return this
         }
+
         /**
          * 背景圆角
          * */
-        fun radius(radius:Float):Builder{
-            this.radius=radius
+        fun radius(radius: Float): Builder {
+            this.radius = radius
             return this
         }
 
         /**
          * 设置背景为空心的
          * */
-        fun hollowBackground():Builder{
-            solid=false
+        fun hollowBackground(): Builder {
+            solid = false
             return this
         }
 
-       /**
-        * 边框宽度
-       * */
-        fun borderWidth(borderWidth:Float): Builder{
-            this.borderWidth=borderWidth
+        /**
+         * 边框宽度
+         * */
+        fun borderWidth(borderWidth: Float): Builder {
+            this.borderWidth = borderWidth
             return this
         }
 
