@@ -5,12 +5,18 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        val TAG = MainActivity.javaClass.simpleName
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,22 +91,30 @@ class MainActivity : AppCompatActivity() {
         val spannableString = SpannableString(stringBuilder.toString())
         //循环遍历设置Span
         for (i in spans.indices) {
-            spannableString.setSpan(spans[i], spannableString.indexOf(spans[i].toString()), spannableString.indexOf(spans[i].toString()) + spans[i].toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(CSpan(this@MainActivity), spannableString.indexOf(spans[i].toString()), spannableString.indexOf(spans[i].toString()) + spans[i].toString().length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+            var msg = spans[i].toString()
+            var start = spannableString.indexOf(msg)
+            var end = spannableString.indexOf(msg) + msg.length
+            spannableString.setSpan(spans[i], start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(CSpan(this@MainActivity, msg), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+            Log.e(TAG, "$msg start=$start end=$end")
         }
+        tv.movementMethod = LinkMovementMethod()
         tv.text = spannableString
+        // todo 点击事件
     }
 
-    class CSpan(context: Context) : ClickableSpan() {
+    class CSpan(context: Context, msg: String) : ClickableSpan() {
 
         private var context: Context? = null
+        private var msg: String? = null
 
         init {
-            this.context=context
+            this.context = context
+            this.msg = msg
         }
 
         override fun onClick(widget: View?) {
-            Toast.makeText(context, "agegaga", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
         }
 
     }
