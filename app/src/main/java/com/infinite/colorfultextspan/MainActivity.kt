@@ -1,9 +1,13 @@
 package com.infinite.colorfultextspan
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.style.ClickableSpan
+import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         spans.add(s2)
         stringBuilder.append(s2)
 
-        val b3= ColorfulTextSpan.Builder(this@MainActivity)
+        val b3 = ColorfulTextSpan.Builder(this@MainActivity)
         val s3 = b3.backgroundColor(R.color.colorPrimaryDark)
                 .texts("国外知名药品")
                 .textColor(android.R.color.white)
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         stringBuilder.append(s3)
         stringBuilder.append(content)
 
-        val b4= ColorfulTextSpan.Builder(this@MainActivity)
+        val b4 = ColorfulTextSpan.Builder(this@MainActivity)
         val s4 = b4.backgroundColor(R.color.colorAccent)
                 .texts("英文文章")
                 .textColor(android.R.color.black)
@@ -67,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         spans.add(s4)
 
         stringBuilder.append(s4)
-        val s5=ColorfulTextSpan.Builder(this@MainActivity)
+        val s5 = ColorfulTextSpan.Builder(this@MainActivity)
                 .texts("收费")
                 .textColor(android.R.color.white)
                 .backgroundColor(R.color.colorPrimary)
@@ -82,7 +86,22 @@ class MainActivity : AppCompatActivity() {
         //循环遍历设置Span
         for (i in spans.indices) {
             spannableString.setSpan(spans[i], spannableString.indexOf(spans[i].toString()), spannableString.indexOf(spans[i].toString()) + spans[i].toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(CSpan(this@MainActivity), spannableString.indexOf(spans[i].toString()), spannableString.indexOf(spans[i].toString()) + spans[i].toString().length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         tv.text = spannableString
+    }
+
+    class CSpan(context: Context) : ClickableSpan() {
+
+        private var context: Context? = null
+
+        init {
+            this.context=context
+        }
+
+        override fun onClick(widget: View?) {
+            Toast.makeText(context, "agegaga", Toast.LENGTH_LONG).show()
+        }
+
     }
 }
