@@ -3,20 +3,23 @@ package com.infinite.colorfultextspan
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Selection
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        val TAG = MainActivity.javaClass.simpleName
+        val TAG = MainActivity::class.java.simpleName!!
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         val spans = mutableListOf<ColorfulTextSpan>()
         val content = "In Kotlin, everything is an object in the sense that we can call member functions and properties on any variable. Some of the types can have a special internal representation - for example, numbers, characters and booleans can be represented as primitive values at runtime - but to the user they look like ordinary classes. In this section we describe the basic types used in Kotlin: numbers, characters, booleans, arrays, and strings.";
         val stringBuilder = StringBuilder()
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,60f)
+
         //第一个Span
 //        stringBuilder.append(" ")
         val b1 = ColorfulTextSpan.Builder(this@MainActivity)
@@ -32,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 .texts("新")
                 .textColor(android.R.color.black)
                 .padding(64)
-                .textSize(60f)
+                .textSize(tv.textSize)
                 .margin(0)
                 .radius(20f)
                 .hollowBackground()
@@ -46,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 .texts("特效药")
                 .textColor(android.R.color.white)
                 .padding(8)
-                .textSize(60f)
+                .textSize(tv.textSize)
                 .margin(64)
                 .radius(10f)
                 .build()
@@ -58,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 .texts("国外知名药品国")
                 .textColor(android.R.color.white)
                 .padding(8)
-                .textSize(60f)
+                .textSize(tv.textSize)
                 .margin(160)
                 .radius(10f)
                 .build()
@@ -71,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 .texts("英文文章")
                 .textColor(android.R.color.black)
                 .padding(80)
-                .textSize(60f)
+                .textSize(tv.textSize)
                 .margin(16)
                 .radius(10f)
                 .build()
@@ -83,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                 .textColor(android.R.color.white)
                 .backgroundColor(R.color.colorPrimary)
                 .padding(80)
-                .textSize(60f)
+                .textSize(tv.textSize)
                 .margin(16)
                 .radius(10f)
                 .build()
@@ -98,12 +103,10 @@ class MainActivity : AppCompatActivity() {
             spannableString.setSpan(spans[i], start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             val str="$msg start=$start end=$end"
             spannableString.setSpan(CSpan(this@MainActivity, msg,str), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
-            Log.e(TAG, str)
+//            Log.e(TAG, str)
         }
-        tv.movementMethod = LinkMovementMethod()
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,60f)
+        tv.movementMethod = FixedLinkMovmentMethod()
         tv.text = spannableString
-        // todo 点击事件
     }
 
     class CSpan(context: Context, msg: String,str:String) : ClickableSpan() {
@@ -122,5 +125,43 @@ class MainActivity : AppCompatActivity() {
             Log.e(TAG,str)
         }
 
+    }
+
+    class FixedLinkMovmentMethod :LinkMovementMethod(){
+        override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
+            val action = event!!.action
+
+            if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN) {
+                var x = event.x.toInt()
+                var y = event.y.toInt()
+
+                x -= widget.totalPaddingLeft
+                y -= widget.totalPaddingTop
+
+                x += widget.scrollX
+                y += widget.scrollY
+
+                val layout = widget.layout
+                val line = layout.getLineForVertical(y)
+                val off = layout.getOffsetForHorizontal(line, x.toFloat())
+
+                val links = buffer.getSpans(off, off, ClickableSpan::class.java)
+
+                if (links.isNotEmpty()) {
+                    if (action == MotionEvent.ACTION_UP) {
+                        links[links.size-1].onClick(widget)
+                    } else if (action == MotionEvent.ACTION_DOWN) {
+                        Selection.setSelection(buffer,
+                                buffer!!.getSpanStart(links[0]),
+                                buffer!!.getSpanEnd(links[0]))
+                    }
+                    return true
+                } else {
+                    Selection.removeSelection(buffer)
+                }
+            }
+
+            return super.onTouchEvent(widget, buffer, event)
+        }
     }
 }

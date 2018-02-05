@@ -76,13 +76,14 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
 //        val fontMetrics = mTextPaint.fontMetrics
 //        val textBaseLine = y + fontMetrics.descent / 2
 //        canvas.drawText(mText, 0, mText.length, left + (mWideh-margin) / 2.toFloat(), textBaseLine, mTextPaint)
-        Log.e(TAG,x.toString())
         var left = x + margin
         val t = y + fm.ascent//计算top时，忽略padding，bottom同理
         val right = left + mTextLength + 2 * mPadding
         val b = t + textHeight + fm.descent
-        Log.e(TAG,right.toString())
         val bgRect = RectF(left, t, right, b)
+        Log.e(TAG, "$mText:$left:$right")
+//        Log.e(TAG,text.substring(start,end)+":"+left+":"+right)
+
         canvas.drawRoundRect(bgRect, mRadius, mRadius, mBgPaint)
         val fontMetrics = mTextPaint.fontMetrics
         val textBaseLine = y + fontMetrics.descent / 2
