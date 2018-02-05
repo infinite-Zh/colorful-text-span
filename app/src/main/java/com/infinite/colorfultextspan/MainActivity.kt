@@ -94,6 +94,19 @@ class MainActivity : AppCompatActivity() {
                 .build()
         spans.add(s5)
         stringBuilder.append(s5)
+        val s6 = ColorfulTextSpan.Builder(this@MainActivity)
+                .texts("下划线")
+                .textColor(R.color.colorPrimary)
+                .backgroundColor(android.R.color.white)
+                .padding(80)
+                .textSize(tv.textSize)
+                .margin(16)
+                .radius(10f)
+                .underLineColor(R.color.black)
+                .build()
+        spans.add(s6)
+        stringBuilder.append(s6)
+
         val spannableString = SpannableString(stringBuilder.toString())
         //循环遍历设置Span
         for (i in spans.indices) {
