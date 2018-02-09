@@ -83,10 +83,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
         Log.e(TAG, "$mText:$left:$right")
 
         canvas.drawRoundRect(bgRect, mRadius, mRadius, mBgPaint)
-        val fontMetrics = mTextPaint.fontMetrics
-
         canvas.drawText(mText, 0, mText.length, (left + right) / 2, y.toFloat(), mTextPaint)
-
         if (mUnderLinePaint != null) {
             canvas.drawLine(left, b, right, b, mUnderLinePaint)
         }
