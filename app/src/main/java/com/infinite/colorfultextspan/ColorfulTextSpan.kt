@@ -118,6 +118,7 @@ class ColorfulTextSpan private constructor(context: Context, builder: Builder) :
 
         /**
          * 背景色
+         * 当调用了{@link hollowBackground()}设置为空心时，作为边框颜色
          * */
         fun backgroundColor(backgroundColorResId: Int): Builder {
             this.backgroundColorResId = backgroundColorResId
