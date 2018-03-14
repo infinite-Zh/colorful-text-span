@@ -14,7 +14,7 @@
         android:textSize="18sp"
         android:padding="8dp"
         android:lineSpacingMultiplier="1.2"
-        android:lineSpacingExtra="5dp"
+        android:lineSpacingExtra="3dp"
         android:gravity="left|center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
